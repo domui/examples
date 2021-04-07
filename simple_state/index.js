@@ -1,15 +1,20 @@
-import { Text, Button, render } from "@domui/core";
+import { Text, Button, render } from '@domui/core';
 
-const component = {
+const Counter = (count) => ({
+  render: () => [Text(count)],
+});
+
+const Main = () => ({
   state: {
-    value: 0,
+    count: 1,
   },
-  body: (state) => [
-    Text(state.value),
-    Button("Increment", () => {
-      state.value += 1;
+  render: (state) => [
+    Text(state.count),
+    Counter(state.count),
+    Button('Increment', () => {
+      state.count += 1;
     }),
   ],
-};
+});
 
-render(component);
+render(Main());

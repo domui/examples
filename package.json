@@ -10,8 +10,9 @@
     "esbuild": "^0.11.2"
   },
   "scripts": {
-    "build:simple": "esbuild simple/index.js --bundle --minify --outfile=simple/dist.js",
-    "build:simple_state": "esbuild simple_state/index.js --bundle --minify --outfile=simple_state/dist.js"
+    "build:simple": "esbuild simple/index.js --bundle --format=esm --outfile=simple/dist.js",
+    "build:simple_state": "esbuild simple_state/index.js --bundle --format=esm --outfile=simple_state/dist.js",
+    "build:simple_lifecycle_hooks": "esbuild simple_lifecycle_hooks/index.js --bundle --format=esm --outfile=simple_lifecycle_hooks/dist.js"
   },
   "repository": {
     "type": "git",

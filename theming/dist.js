@@ -1,22 +1,23 @@
 // ../core/dist/domui.min.js
+var properties = window.getComputedStyle(document.createElement("div"));
+var attachCommonModifiers = () => Object.keys(properties).reduce((result, key) => {
+  result[key] = function styleModifier() {
+    this.className = key;
+    return this;
+  };
+  return result;
+}, {});
+var common_default = attachCommonModifiers;
 var Text = (...props) => ({
   props,
+  ...common_default(),
   body([label]) {
     const element = document.createElement("span");
-    return element.appendChild(label);
-  }
-});
-var Text_default = Text;
-var Button = (...props) => ({
-  props,
-  body([label, action]) {
-    const element = document.createElement("button");
-    element.innerText = label.textContent;
-    element.addEventListener("click", action);
+    element.appendChild(label);
     return element;
   }
 });
-var Button_default = Button;
+var Text_default = Text;
 var render = (schema, target = document.body) => {
   const nodes = {};
   let compiled = false;
@@ -53,30 +54,19 @@ var render = (schema, target = document.body) => {
     internalSchema.forEach((element) => {
       if (element.body) {
         const body = element.body(mapProps(element.props));
+        body.className = element.className;
         target.appendChild(body);
       } else {
         renderCycle(element.render(element.state ? createState(element.state) : {}));
       }
     });
   };
-  renderCycle(schema.render(createState(schema.state)));
+  renderCycle(schema.render(schema.state ? createState(schema.state) : {}));
   compiled = true;
 };
 
-// simple_state/index.js
-var Counter = (count) => ({
-  render: () => [Text_default(count)]
-});
+// simple/index.js
 var Main = () => ({
-  state: {
-    count: 1
-  },
-  render: (state) => [
-    Text_default(state.count),
-    Counter(state.count),
-    Button_default("Increment", () => {
-      state.count += 1;
-    })
-  ]
+  render: () => [Text_default("Hello World").padding("14px")]
 });
 render(Main());
