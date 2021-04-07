@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "dependencies": {
-    "@domui/core": "^0.1.22"
+    "@domui/core": "^0.1.24"
   },
   "devDependencies": {
     "esbuild": "^0.11.2"
@@ -12,6 +12,7 @@
   "scripts": {
     "build:simple": "esbuild simple/index.js --bundle --format=esm --outfile=simple/dist.js",
     "build:simple_state": "esbuild simple_state/index.js --bundle --format=esm --outfile=simple_state/dist.js",
+    "build:demo_page": "esbuild demo_page/index.js --bundle --format=esm --outfile=demo_page/dist.js",
     "build:simple_lifecycle_hooks": "esbuild simple_lifecycle_hooks/index.js --bundle --format=esm --outfile=simple_lifecycle_hooks/dist.js"
   },
   "repository": {

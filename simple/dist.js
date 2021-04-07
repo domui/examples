@@ -1,71 +1,41 @@
-// ../core/dist/domui.min.js
-var properties = window.getComputedStyle(document.createElement("div"));
-var attachCommonModifiers = () => Object.keys(properties).reduce((result, key) => {
-  result[key] = function styleModifier(value) {
-    this.element.style[key] = value;
-    return this;
-  };
-  return result;
-}, {});
-var common_default = attachCommonModifiers;
-var Text = (...props) => ({
-  props,
-  element: document.createElement("span"),
-  ...common_default(),
-  body([label]) {
-    this.element.appendChild(label);
-    return this.element;
-  }
-});
-var Text_default = Text;
-var render = (schema, target = document.body) => {
-  const nodes = {};
-  let compiled = false;
-  const createState = (initialState) => Proxy.revocable(initialState, {
-    get: (store, name) => {
-      const value = store[name].value || store[name];
-      return compiled ? value : {name, value};
-    },
-    set: (store, prop, value) => {
-      if (compiled) {
-        nodes[prop].forEach((elem) => {
-          elem.textContent = value;
-        });
-      }
-      return Reflect.set(store, prop, value);
+// node_modules/@domui/core/dist/domui.min.js
+var m = window.getComputedStyle(document.createElement("div"));
+var x = () => Object.keys(m).reduce((n, r) => (n[r] = function(o) {
+  return this.element.style[r] = o, this;
+}, n), {});
+var i = x;
+var y = (...n) => ({props: n, element: document.createElement("span"), ...i(), body([r]) {
+  return this.element.appendChild(r), this.element;
+}});
+var h = y;
+var N = (n, r = document.body) => {
+  let d = {}, o = false, a = (s) => Proxy.revocable(s, {get: (e, t) => {
+    let c = e[t].value || e[t];
+    return o ? c : {name: t, value: c};
+  }, set: (e, t, c) => (o && d[t].forEach((f) => {
+    f.textContent = c;
+  }), Reflect.set(e, t, c))}).proxy, l = (s) => s.map((e) => {
+    if (typeof e == "function")
+      return e;
+    if (e.value !== void 0) {
+      let t = document.createTextNode(e.value);
+      return d[e.name]?.length ? d[e.name].push(t) : d[e.name] = [t], t;
     }
-  }).proxy;
-  const mapProps = (props) => props.map((prop) => {
-    if (typeof prop === "function") {
-      return prop;
-    }
-    if (prop.value !== void 0) {
-      const textNode = document.createTextNode(prop.value);
-      if (nodes[prop.name]?.length) {
-        nodes[prop.name].push(textNode);
-      } else {
-        nodes[prop.name] = [textNode];
-      }
-      return textNode;
-    }
-    return document.createTextNode(prop);
-  });
-  const renderCycle = (internalSchema) => {
-    internalSchema.forEach((element) => {
-      if (element.body) {
-        const body = element.body(mapProps(element.props));
-        target.appendChild(body);
-      } else {
-        renderCycle(element.render(element.state ? createState(element.state) : {}));
-      }
+    return document.createTextNode(e);
+  }), u = (s) => {
+    s.forEach((e) => {
+      if (e.body) {
+        let t = e.body(l(e.props));
+        r.appendChild(t);
+      } else
+        u(e.render(e.state ? a(e.state) : {}));
     });
   };
-  renderCycle(schema.render(schema.state ? createState(schema.state) : {}));
-  compiled = true;
+  u(n.render(n.state ? a(n.state) : {})), o = true;
 };
 
 // simple/index.js
 var Main = () => ({
-  render: () => [Text_default("Hello World").padding("14px")]
+  render: () => [h("Hello World").padding("14px")]
 });
-render(Main());
+N(Main());
